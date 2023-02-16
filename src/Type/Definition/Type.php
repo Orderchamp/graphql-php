@@ -11,6 +11,7 @@ use GraphQL\Utils\Utils;
  */
 abstract class Type implements \JsonSerializable
 {
+    public static $USE_COERCION = false;
     public const INT = 'Int';
     public const FLOAT = 'Float';
     public const STRING = 'String';
@@ -33,7 +34,7 @@ abstract class Type implements \JsonSerializable
      */
     public static function int(): ScalarType
     {
-        return static::$standardTypes[self::INT] ??= new IntType();
+        return static::$standardTypes[self::INT] ??= (self::$USE_COERCION ? new IntTypeCoercion : new IntType());
     }
 
     /**
@@ -41,7 +42,7 @@ abstract class Type implements \JsonSerializable
      */
     public static function float(): ScalarType
     {
-        return static::$standardTypes[self::FLOAT] ??= new FloatType();
+        return static::$standardTypes[self::FLOAT] ??= (self::$USE_COERCION ? new FloatTypeCoercion : new FloatType());
     }
 
     /**
@@ -49,7 +50,7 @@ abstract class Type implements \JsonSerializable
      */
     public static function string(): ScalarType
     {
-        return static::$standardTypes[self::STRING] ??= new StringType();
+        return static::$standardTypes[self::STRING] ??= (self::$USE_COERCION ? new StringTypeCoercion : new StringType());
     }
 
     /**
@@ -65,7 +66,7 @@ abstract class Type implements \JsonSerializable
      */
     public static function id(): ScalarType
     {
-        return static::$standardTypes[self::ID] ??= new IDType();
+        return static::$standardTypes[self::ID] ??= (self::$USE_COERCION ? new IDTypeCoercion : new IDType());
     }
 
     /**
